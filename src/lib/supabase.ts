@@ -1,10 +1,9 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+// Access environment variables directly
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
-// Only initialize if we have the actual credentials
-// This prevents 'Failed to fetch' errors caused by build-time placeholders
-export const supabase = (supabaseUrl && supabaseAnonKey) 
-  ? createClient(supabaseUrl, supabaseAnonKey) 
-  : null as any;
+// Initialize the client. If URL/Key are missing, the client will exist but 
+// auth methods will return clear error messages instead of a system crash.
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);

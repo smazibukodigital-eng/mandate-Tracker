@@ -3,16 +3,21 @@
 import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { motion } from 'framer-motion';
-import { Mail, Lock, ShieldCheck, ArrowRight } from 'lucide-react';
+import { Mail, Lock, ShieldCheck, ArrowRight, Eye, EyeOff } from 'lucide-react';
 
 export default function Auth() {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!supabase) {
+      alert('System connection pending. Please verify environment variables.');
+      return;
+    }
     setLoading(true);
     try {
       if (isSignUp) {
@@ -63,7 +68,7 @@ export default function Auth() {
       background: 'rgba(255, 255, 255, 0.04)',
       border: '1px solid rgba(255, 255, 255, 0.1)',
       borderRadius: '14px',
-      padding: '1.1rem 1rem 1.1rem 3.2rem',
+      padding: '1.1rem 3.2rem 1.1rem 3.2rem',
       color: 'white',
       fontSize: '0.9rem',
       outline: 'none',
@@ -129,8 +134,6 @@ export default function Auth() {
                 style={eliteStyles.input}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                onFocus={(e) => e.target.style.borderColor = '#3b82f6'}
-                onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
               />
             </div>
           </div>
@@ -140,14 +143,19 @@ export default function Auth() {
             <div style={eliteStyles.inputGroup}>
               <Lock size={18} color="#444" style={{ position: 'absolute', left: '1.1rem' }} />
               <input 
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
                 style={eliteStyles.input}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                onFocus={(e) => e.target.style.borderColor = '#3b82f6'}
-                onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
               />
+              <button 
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                style={{ position: 'absolute', right: '1.1rem', background: 'none', border: 'none', color: '#444', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
             </div>
           </div>
 
@@ -161,8 +169,6 @@ export default function Auth() {
           <button 
             onClick={() => setIsSignUp(!isSignUp)}
             style={{ background: 'none', border: 'none', color: '#444', fontSize: '0.65rem', fontWeight: 800, textTransform: 'uppercase', cursor: 'pointer', transition: 'color 0.2s', letterSpacing: '0.05em' }}
-            onMouseOver={(e) => e.currentTarget.style.color = '#3b82f6'}
-            onMouseOut={(e) => e.currentTarget.style.color = '#444'}
           >
             {isSignUp ? 'Already have an account? Sign In' : "Don't have an account? Create One"}
           </button>
