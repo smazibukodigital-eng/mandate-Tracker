@@ -319,7 +319,7 @@ export default function Dashboard() {
             </button>
           </motion.div>
         ) : (
-          <motion.div key="on" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+          <motion.div key="on" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
             {/* Dashboard Header */}
             <header style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
               <div>
@@ -378,7 +378,7 @@ export default function Dashboard() {
             </div>
 
             {/* Task List */}
-            <div style={{ flex: 1, overflowY: 'auto', paddingBottom: '100px', scrollbarWidth: 'none' }}>
+            <div style={{ flex: 1, overflowY: 'auto', paddingBottom: '120px', scrollbarWidth: 'none', minHeight: 0 }}>
               {activeMission && (
                 <>
                   {dailyTasks.map((t: any) => (
