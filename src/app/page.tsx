@@ -395,37 +395,51 @@ export default function Dashboard() {
               ))}
             </div>
 
-            {/* Task List */}
-            <div style={{ flex: 1, overflowY: 'auto', paddingBottom: '120px', scrollbarWidth: 'none', minHeight: 0 }}>
-              {activeMission && (
-                <>
-                  {dailyTasks.map((t: any) => (
-                    <div key={t.id} style={{ ...styles.glassCard, display: 'flex', alignItems: 'center', gap: '0.75rem', opacity: t.completed ? 0.4 : 1, marginBottom: '0.5rem' }}>
-                      <div onClick={() => toggleTask(activeMission.id, t.id)} style={{ width: '22px', height: '22px', borderRadius: '50%', border: t.completed ? 'none' : '2px solid #64748b', background: t.completed ? '#10b981' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        {t.completed && <Check size={14} color="white" />}
-                      </div>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: '12px', fontWeight: 600, color: t.completed ? '#94a3b8' : 'white' }}>{t.text}</div>
-                        <div style={{ fontSize: '9px', color: '#64748b', fontWeight: 700, marginTop: '2px' }}>{t.time} DAILY</div>
-                      </div>
-                      <button onClick={() => deleteTask(t.id)} style={{ background: 'none', border: 'none', color: '#ef444460' }}><Trash2 size={16}/></button>
-                    </div>
-                  ))}
-                  {milestones.map((t: any) => (
-                    <div key={t.id} style={{ ...styles.glassCard, display: 'flex', alignItems: 'center', gap: '0.75rem', opacity: t.completed ? 0.4 : 1, marginBottom: '0.5rem', borderLeft: '4px solid #f59e0b' }}>
-                      <div onClick={() => toggleTask(activeMission.id, t.id)} style={{ width: '22px', height: '22px', borderRadius: '50%', border: t.completed ? 'none' : '2px solid #64748b', background: t.completed ? '#f59e0b' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        {t.completed && <Check size={14} color="white" />}
-                      </div>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: '12px', fontWeight: 600, color: t.completed ? '#94a3b8' : 'white' }}>{t.text}</div>
-                        <div style={{ fontSize: '9px', color: '#f59e0b', fontWeight: 800, marginTop: '2px' }}>MONTHLY MANDATE</div>
-                      </div>
-                      <button onClick={() => deleteTask(t.id)} style={{ background: 'none', border: 'none', color: '#ef444460' }}><Trash2 size={16}/></button>
-                    </div>
-                  ))}
-                </>
-              )}
-            </div>
+            {/* Daily Objectives */}
+            {dailyTasks.length > 0 && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', marginTop: '0.5rem' }}>
+                <div style={{ height: '1px', flex: 1, background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.1))' }} />
+                <div style={{ fontSize: '9px', fontWeight: 900, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.2em' }}>Daily Objectives</div>
+                <div style={{ height: '1px', flex: 1, background: 'linear-gradient(to left, transparent, rgba(255,255,255,0.1))' }} />
+              </div>
+            )}
+            {dailyTasks.map((t: any) => (
+              <div key={t.id} style={{ ...styles.glassCard, display: 'flex', alignItems: 'center', gap: '0.75rem', opacity: t.completed ? 0.4 : 1, marginBottom: '0.5rem' }}>
+                <div onClick={() => toggleTask(activeMission.id, t.id)} style={{ width: '22px', height: '22px', borderRadius: '50%', border: t.completed ? 'none' : '2px solid #64748b', background: t.completed ? '#10b981' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  {t.completed && <Check size={14} color="white" />}
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: '12px', fontWeight: 600, color: t.completed ? '#94a3b8' : 'white' }}>{t.text}</div>
+                  <div onClick={() => startEdit(t)} style={{ fontSize: '9px', color: '#60a5fa', fontWeight: 800, marginTop: '2px', display: 'flex', alignItems: 'center', gap: '0.25rem', cursor: 'pointer' }}>
+                    <Clock size={10} /> {t.time || 'SET TIME'}
+                  </div>
+                </div>
+                <button onClick={() => deleteTask(t.id)} style={{ background: 'none', border: 'none', color: '#ef444460' }}><Trash2 size={16}/></button>
+              </div>
+            ))}
+
+            {/* Monthly Mandates Divider */}
+            {milestones.length > 0 && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', margin: '2rem 0 1rem' }}>
+                <div style={{ height: '1px', flex: 1, background: 'linear-gradient(to right, transparent, rgba(245, 158, 11, 0.2))' }} />
+                <div style={{ fontSize: '9px', fontWeight: 900, color: '#f59e0b', textTransform: 'uppercase', letterSpacing: '0.2em' }}>Monthly Mandates</div>
+                <div style={{ height: '1px', flex: 1, background: 'linear-gradient(to left, transparent, rgba(245, 158, 11, 0.2))' }} />
+              </div>
+            )}
+            {milestones.map((t: any) => (
+              <div key={t.id} style={{ ...styles.glassCard, display: 'flex', alignItems: 'center', gap: '0.75rem', opacity: t.completed ? 0.4 : 1, marginBottom: '0.5rem', borderLeft: '4px solid #f59e0b' }}>
+                <div onClick={() => toggleTask(activeMission.id, t.id)} style={{ width: '22px', height: '22px', borderRadius: '50%', border: t.completed ? 'none' : '2px solid #64748b', background: t.completed ? '#f59e0b' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  {t.completed && <Check size={14} color="white" />}
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: '12px', fontWeight: 600, color: t.completed ? '#94a3b8' : 'white' }}>{t.text}</div>
+                  <div onClick={() => startEdit(t)} style={{ fontSize: '9px', color: '#f59e0b', fontWeight: 800, marginTop: '2px', display: 'flex', alignItems: 'center', gap: '0.25rem', cursor: 'pointer' }}>
+                    <Clock size={10} /> {t.time || 'SET TIME'}
+                  </div>
+                </div>
+                <button onClick={() => deleteTask(t.id)} style={{ background: 'none', border: 'none', color: '#ef444460' }}><Trash2 size={16}/></button>
+              </div>
+            ))}
 
             {/* Footer Actions */}
             <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, padding: '1.25rem', background: 'linear-gradient(to top, #020617 80%, transparent)', display: 'flex', gap: '0.75rem' }}>
@@ -525,13 +539,18 @@ export default function Dashboard() {
               <h3 style={{ fontSize: '1.25rem', fontWeight: 900, textTransform: 'uppercase', marginBottom: '1.5rem' }}>New Objective</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                 <input autoFocus placeholder="What is the objective?" value={newTaskText} onChange={(e) => setNewTaskText(e.target.value)} style={{ width: '100%', background: '#1e293b', border: '1px solid #475569', borderRadius: '12px', padding: '1rem', color: 'white', outline: 'none' }} />
-                <div style={{ display: 'flex', background: '#020617', borderRadius: '10px', padding: '0.3rem' }}>
-                  <button onClick={() => setNewTaskType('daily')} style={{ flex: 1, padding: '0.6rem', borderRadius: '8px', border: 'none', background: newTaskType === 'daily' ? '#1e293b' : 'transparent', color: 'white', fontSize: '10px', fontWeight: 700 }}>DAILY</button>
-                  <button onClick={() => setNewTaskType('milestone')} style={{ flex: 1, padding: '0.6rem', borderRadius: '8px', border: 'none', background: newTaskType === 'milestone' ? '#1e293b' : 'transparent', color: 'white', fontSize: '10px', fontWeight: 700 }}>MONTHLY</button>
-                </div>
-                {newTaskType === 'daily' && (
-                  <input type="time" value={newTaskTime} onChange={(e) => setNewTaskTime(e.target.value)} style={{ width: '100%', background: '#1e293b', border: '1px solid #475569', borderRadius: '8px', padding: '0.6rem', color: 'white' }} />
+                {editingTask ? (
+                  <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: 700 }}>REMAP OBJECTIVE</div>
+                ) : (
+                  <div style={{ display: 'flex', background: '#020617', borderRadius: '10px', padding: '0.3rem' }}>
+                    <button onClick={() => setNewTaskType('daily')} style={{ flex: 1, padding: '0.6rem', borderRadius: '8px', border: 'none', background: newTaskType === 'daily' ? '#1e293b' : 'transparent', color: 'white', fontSize: '10px', fontWeight: 700 }}>DAILY</button>
+                    <button onClick={() => setNewTaskType('milestone')} style={{ flex: 1, padding: '0.6rem', borderRadius: '8px', border: 'none', background: newTaskType === 'milestone' ? '#1e293b' : 'transparent', color: 'white', fontSize: '10px', fontWeight: 700 }}>MONTHLY</button>
+                  </div>
                 )}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', background: '#1e293b', border: '1px solid #475569', borderRadius: '12px', padding: '1rem' }}>
+                  <Clock size={18} color="#60a5fa" />
+                  <input type="time" value={newTaskTime} onChange={(e) => setNewTaskTime(e.target.value)} style={{ flex: 1, background: 'transparent', border: 'none', color: 'white', fontSize: '14px', fontWeight: 700, outline: 'none' }} />
+                </div>
                 <div style={{ display: 'flex', gap: '0.75rem' }}>
                   <button onClick={() => setShowAddModal(false)} style={{ flex: 1, padding: '1rem', borderRadius: '12px', background: 'transparent', border: '1px solid #475569', color: '#94a3b8' }}>CANCEL</button>
                   <button onClick={addTask} style={{ flex: 2, padding: '1rem', borderRadius: '12px', background: 'white', color: 'black', fontWeight: 900 }}>INITIALIZE</button>
@@ -562,13 +581,23 @@ export default function Dashboard() {
                 </div>
 
                 <button 
-                  onClick={() => Notification.requestPermission()}
-                  style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', background: 'rgba(59, 130, 246, 0.2)', borderRadius: '12px', border: '1px solid rgba(59, 130, 246, 0.3)', color: '#93c5fd', textAlign: 'left' }}
+                  onClick={() => {
+                    if ('serviceWorker' in navigator) {
+                      navigator.serviceWorker.ready.then(reg => {
+                        reg.showNotification('MANDATE SYSTEM TEST', {
+                          body: 'Operational alerts are ONLINE.',
+                          icon: '/icon-192x192.png',
+                          vibrate: [200, 100, 200]
+                        } as any);
+                      });
+                    }
+                  }}
+                  style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', background: 'rgba(16, 185, 129, 0.1)', borderRadius: '12px', border: '1px solid rgba(16, 185, 129, 0.2)', color: '#10b981', textAlign: 'left', cursor: 'pointer' }}
                 >
                   <Bell size={20} />
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: '11px', fontWeight: 700 }}>ENABLE SYSTEM ALERTS</div>
-                    <div style={{ fontSize: '8px', color: '#cbd5e1' }}>Allow background push notifications</div>
+                    <div style={{ fontSize: '11px', fontWeight: 700 }}>TEST NOTIFICATION</div>
+                    <div style={{ fontSize: '8px', color: '#cbd5e1' }}>Trigger a manual system alert now</div>
                   </div>
                 </button>
                 <label style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', border: '1px dashed #475569', cursor: 'pointer' }}>
