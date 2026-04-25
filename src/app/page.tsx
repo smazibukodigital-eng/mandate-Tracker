@@ -395,51 +395,58 @@ export default function Dashboard() {
               ))}
             </div>
 
-            {/* Daily Objectives */}
-            {dailyTasks.length > 0 && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', marginTop: '0.5rem' }}>
-                <div style={{ height: '1px', flex: 1, background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.1))' }} />
-                <div style={{ fontSize: '9px', fontWeight: 900, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.2em' }}>Daily Objectives</div>
-                <div style={{ height: '1px', flex: 1, background: 'linear-gradient(to left, transparent, rgba(255,255,255,0.1))' }} />
-              </div>
-            )}
-            {dailyTasks.map((t: any) => (
-              <div key={t.id} style={{ ...styles.glassCard, display: 'flex', alignItems: 'center', gap: '0.75rem', opacity: t.completed ? 0.4 : 1, marginBottom: '0.5rem' }}>
-                <div onClick={() => toggleTask(activeMission.id, t.id)} style={{ width: '22px', height: '22px', borderRadius: '50%', border: t.completed ? 'none' : '2px solid #64748b', background: t.completed ? '#10b981' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  {t.completed && <Check size={14} color="white" />}
-                </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: '12px', fontWeight: 600, color: t.completed ? '#94a3b8' : 'white' }}>{t.text}</div>
-                  <div onClick={() => startEdit(t)} style={{ fontSize: '9px', color: '#60a5fa', fontWeight: 800, marginTop: '2px', display: 'flex', alignItems: 'center', gap: '0.25rem', cursor: 'pointer' }}>
-                    <Clock size={10} /> {t.time || 'SET TIME'}
-                  </div>
-                </div>
-                <button onClick={() => deleteTask(t.id)} style={{ background: 'none', border: 'none', color: '#ef444460' }}><Trash2 size={16}/></button>
-              </div>
-            ))}
+            {/* Task List Container */}
+            <div style={{ flex: 1, overflowY: 'auto', paddingBottom: '120px', scrollbarWidth: 'none', minHeight: 0 }}>
+              {activeMission && (
+                <>
+                  {/* Daily Objectives */}
+                  {dailyTasks.length > 0 && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', marginTop: '0.5rem' }}>
+                      <div style={{ height: '1px', flex: 1, background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.1))' }} />
+                      <div style={{ fontSize: '9px', fontWeight: 900, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.2em' }}>Daily Objectives</div>
+                      <div style={{ height: '1px', flex: 1, background: 'linear-gradient(to left, transparent, rgba(255,255,255,0.1))' }} />
+                    </div>
+                  )}
+                  {dailyTasks.map((t: any) => (
+                    <div key={t.id} style={{ ...styles.glassCard, display: 'flex', alignItems: 'center', gap: '0.75rem', opacity: t.completed ? 0.4 : 1, marginBottom: '0.5rem' }}>
+                      <div onClick={() => toggleTask(activeMission.id, t.id)} style={{ width: '22px', height: '22px', borderRadius: '50%', border: t.completed ? 'none' : '2px solid #64748b', background: t.completed ? '#10b981' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        {t.completed && <Check size={14} color="white" />}
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: '12px', fontWeight: 600, color: t.completed ? '#94a3b8' : 'white' }}>{t.text}</div>
+                        <div onClick={() => startEdit(t)} style={{ fontSize: '9px', color: '#60a5fa', fontWeight: 800, marginTop: '2px', display: 'flex', alignItems: 'center', gap: '0.25rem', cursor: 'pointer' }}>
+                          <Clock size={10} /> {t.time || 'SET TIME'}
+                        </div>
+                      </div>
+                      <button onClick={() => deleteTask(t.id)} style={{ background: 'none', border: 'none', color: '#ef444460' }}><Trash2 size={16}/></button>
+                    </div>
+                  ))}
 
-            {/* Monthly Mandates Divider */}
-            {milestones.length > 0 && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', margin: '2rem 0 1rem' }}>
-                <div style={{ height: '1px', flex: 1, background: 'linear-gradient(to right, transparent, rgba(245, 158, 11, 0.2))' }} />
-                <div style={{ fontSize: '9px', fontWeight: 900, color: '#f59e0b', textTransform: 'uppercase', letterSpacing: '0.2em' }}>Monthly Mandates</div>
-                <div style={{ height: '1px', flex: 1, background: 'linear-gradient(to left, transparent, rgba(245, 158, 11, 0.2))' }} />
-              </div>
-            )}
-            {milestones.map((t: any) => (
-              <div key={t.id} style={{ ...styles.glassCard, display: 'flex', alignItems: 'center', gap: '0.75rem', opacity: t.completed ? 0.4 : 1, marginBottom: '0.5rem', borderLeft: '4px solid #f59e0b' }}>
-                <div onClick={() => toggleTask(activeMission.id, t.id)} style={{ width: '22px', height: '22px', borderRadius: '50%', border: t.completed ? 'none' : '2px solid #64748b', background: t.completed ? '#f59e0b' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  {t.completed && <Check size={14} color="white" />}
-                </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: '12px', fontWeight: 600, color: t.completed ? '#94a3b8' : 'white' }}>{t.text}</div>
-                  <div onClick={() => startEdit(t)} style={{ fontSize: '9px', color: '#f59e0b', fontWeight: 800, marginTop: '2px', display: 'flex', alignItems: 'center', gap: '0.25rem', cursor: 'pointer' }}>
-                    <Clock size={10} /> {t.time || 'SET TIME'}
-                  </div>
-                </div>
-                <button onClick={() => deleteTask(t.id)} style={{ background: 'none', border: 'none', color: '#ef444460' }}><Trash2 size={16}/></button>
-              </div>
-            ))}
+                  {/* Monthly Mandates Divider */}
+                  {milestones.length > 0 && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', margin: '2rem 0 1rem' }}>
+                      <div style={{ height: '1px', flex: 1, background: 'linear-gradient(to right, transparent, rgba(245, 158, 11, 0.2))' }} />
+                      <div style={{ fontSize: '9px', fontWeight: 900, color: '#f59e0b', textTransform: 'uppercase', letterSpacing: '0.2em' }}>Monthly Mandates</div>
+                      <div style={{ height: '1px', flex: 1, background: 'linear-gradient(to left, transparent, rgba(245, 158, 11, 0.2))' }} />
+                    </div>
+                  )}
+                  {milestones.map((t: any) => (
+                    <div key={t.id} style={{ ...styles.glassCard, display: 'flex', alignItems: 'center', gap: '0.75rem', opacity: t.completed ? 0.4 : 1, marginBottom: '0.5rem', borderLeft: '4px solid #f59e0b' }}>
+                      <div onClick={() => toggleTask(activeMission.id, t.id)} style={{ width: '22px', height: '22px', borderRadius: '50%', border: t.completed ? 'none' : '2px solid #64748b', background: t.completed ? '#f59e0b' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        {t.completed && <Check size={14} color="white" />}
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: '12px', fontWeight: 600, color: t.completed ? '#94a3b8' : 'white' }}>{t.text}</div>
+                        <div onClick={() => startEdit(t)} style={{ fontSize: '9px', color: '#f59e0b', fontWeight: 800, marginTop: '2px', display: 'flex', alignItems: 'center', gap: '0.25rem', cursor: 'pointer' }}>
+                          <Clock size={10} /> {t.time || 'SET TIME'}
+                        </div>
+                      </div>
+                      <button onClick={() => deleteTask(t.id)} style={{ background: 'none', border: 'none', color: '#ef444460' }}><Trash2 size={16}/></button>
+                    </div>
+                  ))}
+                </>
+              )}
+            </div>
 
             {/* Footer Actions */}
             <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, padding: '1.25rem', background: 'linear-gradient(to top, #020617 80%, transparent)', display: 'flex', gap: '0.75rem' }}>
