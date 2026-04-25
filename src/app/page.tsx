@@ -328,8 +328,13 @@ export default function Dashboard() {
           <h1 style={{ fontSize: '1.35rem', fontWeight: 900, lineHeight: 1.1, marginTop: '0.3rem', textTransform: 'uppercase' }}>{mandateName}</h1>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.4rem' }}>
-          <div style={{ fontSize: '11px', fontWeight: 900, color: '#93c5fd', fontFamily: 'monospace' }}>
-            {currentTime ? currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '--:--:--'}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <div style={{ fontSize: '11px', fontWeight: 900, color: '#93c5fd', fontFamily: 'monospace' }}>
+              {currentTime ? currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '--:--:--'}
+            </div>
+            <button onClick={() => setShowSettings(true)} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', padding: '0.4rem', borderRadius: '8px', color: 'white', cursor: 'pointer' }}>
+              <Settings2 size={16}/>
+            </button>
           </div>
           <div style={{ background: 'rgba(59, 130, 246, 0.2)', borderRadius: '99px', padding: '0.2rem 0.5rem', fontSize: '9px', fontWeight: 700, color: '#bfdbfe' }}>
             <Zap size={9} fill="currentColor" /> {streak} DAY STREAK
@@ -440,8 +445,30 @@ export default function Dashboard() {
             <div style={{ maxWidth: '400px', width: '100%' }}>
               <Shield size={64} color="#3b82f6" style={{ margin: '0 auto 1.5rem' }} />
               <h2 style={{ fontSize: '2rem', fontWeight: 900, textTransform: 'uppercase', textAlign: 'center' }}>Init Mandate</h2>
-              <input value={mandateName} onChange={(e) => setMandateName(e.target.value.toUpperCase())} placeholder="MANDATE NAME" style={{ width: '100%', background: '#1e293b', border: '1px solid #475569', borderRadius: '12px', padding: '1rem', color: 'white', marginTop: '2rem', outline: 'none', textAlign: 'center' }} />
-              <button onClick={handleCreateMandate} style={{ width: '100%', padding: '1.25rem', borderRadius: '16px', background: 'linear-gradient(to right, #3b82f6, #8b5cf6)', border: 'none', color: 'white', fontWeight: 900, textTransform: 'uppercase', marginTop: '1.5rem' }}>Initialize</button>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginTop: '2rem' }}>
+                <div>
+                  <label style={{ fontSize: '11px', fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Mandate Name</label>
+                  <input value={mandateName} onChange={(e) => setMandateName(e.target.value.toUpperCase())} placeholder="MANDATE NAME" style={{ width: '100%', background: '#1e293b', border: '1px solid #475569', borderRadius: '12px', padding: '1rem', color: 'white', marginTop: '0.5rem', outline: 'none' }} />
+                </div>
+
+                <div>
+                  <label style={{ fontSize: '11px', fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Operational Units (Tabs)</label>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '0.5rem' }}>
+                    {obMissions.map(m => (
+                      <div key={m} style={{ background: '#334155', padding: '0.4rem 0.8rem', borderRadius: '8px', fontSize: '10px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        {m} <X size={12} onClick={() => setObMissions(obMissions.filter(x => x !== m))} style={{ cursor: 'pointer' }} />
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.75rem' }}>
+                    <input value={newObMission} onChange={(e) => setNewObMission(e.target.value)} placeholder="Add Category..." style={{ flex: 1, background: '#1e293b', border: '1px solid #475569', borderRadius: '8px', padding: '0.6rem', color: 'white', fontSize: '11px' }} />
+                    <button onClick={() => { if(newObMission) { setObMissions([...obMissions, newObMission]); setNewObMission(''); } }} style={{ background: '#3b82f6', border: 'none', color: 'white', borderRadius: '8px', padding: '0.6rem' }}><Plus size={16}/></button>
+                  </div>
+                </div>
+
+                <button onClick={handleCreateMandate} style={{ width: '100%', padding: '1.25rem', borderRadius: '16px', background: 'linear-gradient(to right, #3b82f6, #8b5cf6)', border: 'none', color: 'white', fontWeight: 900, textTransform: 'uppercase', marginTop: '1rem' }}>Initialize Mandate</button>
+              </div>
             </div>
           </motion.div>
         )}
