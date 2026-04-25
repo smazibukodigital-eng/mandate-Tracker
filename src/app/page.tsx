@@ -425,15 +425,39 @@ export default function Dashboard() {
       {/* Reflection Modal */}
       <AnimatePresence>
         {showEndDay && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ position: 'fixed', inset: 0, background: 'rgba(2,6,23,0.95)', backdropFilter: 'blur(20px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '1.5rem' }}>
-            <motion.div initial={{ scale: 0.9, y: 30 }} animate={{ scale: 1, y: 0 }} style={{ ...styles.glassCard, width: '100%', maxWidth: '400px', padding: '2rem', textAlign: 'center' }}>
-              <ClipboardList size={48} color="#3b82f6" style={{ marginBottom: '1.5rem' }} />
-              <h3 style={{ fontSize: '1.5rem', fontWeight: 900, textTransform: 'uppercase' }}>End of Ops</h3>
-              <p style={{ fontSize: '11px', color: '#94a3b8', marginTop: '0.5rem' }}>Log your operational reflections.</p>
-              <textarea placeholder="How was your discipline today?" value={reflection} onChange={(e) => setReflection(e.target.value)} style={{ width: '100%', height: '100px', background: '#1e293b', border: '1px solid #475569', borderRadius: '12px', padding: '1rem', color: 'white', fontSize: '12px', marginTop: '1.5rem', outline: 'none' }} />
-              <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
-                <button onClick={() => setShowEndDay(false)} style={{ flex: 1, padding: '1rem', borderRadius: '12px', background: 'transparent', border: '1px solid #475569', color: 'white', fontWeight: 700 }}>STAY</button>
-                <button onClick={() => { setStatus('off-duty'); setShowEndDay(false); }} style={{ flex: 2, padding: '1rem', borderRadius: '12px', background: 'white', color: 'black', fontWeight: 900, textTransform: 'uppercase' }}>Submit & Home</button>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ position: 'fixed', inset: 0, background: 'rgba(2,6,23,0.9)', backdropFilter: 'blur(30px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 4000, padding: '1.5rem' }}>
+            <motion.div initial={{ scale: 0.9, y: 30 }} animate={{ scale: 1, y: 0 }} style={{ ...styles.glassCard, width: '100%', maxWidth: '400px', padding: '2.5rem', textAlign: 'center', border: '1px solid rgba(255,255,255,0.2)' }}>
+              <div style={{ width: '60px', height: '60px', background: 'rgba(59, 130, 246, 0.1)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
+                <ClipboardList size={32} color="#60a5fa" />
+              </div>
+              <h3 style={{ fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em' }}>End of Ops</h3>
+              <p style={{ fontSize: '10px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.2em', marginTop: '0.5rem' }}>Log Operational Reflection</p>
+              
+              <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', margin: '1.5rem 0' }}>
+                <div style={{ padding: '0.5rem 1rem', background: 'rgba(16, 185, 129, 0.1)', borderRadius: '8px', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
+                  <div style={{ fontSize: '12px', fontWeight: 900, color: '#10b981' }}>{totalCompleted}</div>
+                  <div style={{ fontSize: '7px', fontWeight: 800, color: '#10b981' }}>DONE</div>
+                </div>
+                <div style={{ padding: '0.5rem 1rem', background: 'rgba(59, 130, 246, 0.1)', borderRadius: '8px', border: '1px solid rgba(59, 130, 246, 0.2)' }}>
+                  <div style={{ fontSize: '12px', fontWeight: 900, color: '#3b82f6' }}>+{totalCompleted * 15}</div>
+                  <div style={{ fontSize: '7px', fontWeight: 800, color: '#3b82f6' }}>XP GAIN</div>
+                </div>
+              </div>
+
+              <textarea 
+                placeholder="Briefly log your discipline today..." 
+                value={reflection} 
+                onChange={(e) => setReflection(e.target.value)} 
+                style={{ width: '100%', height: '120px', background: 'rgba(2, 6, 23, 0.5)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '1rem', color: 'white', fontSize: '12px', marginTop: '0.5rem', outline: 'none', resize: 'none' }} 
+              />
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '2rem' }}>
+                <button onClick={() => { setStatus('off-duty'); setShowEndDay(false); }} style={{ width: '100%', padding: '1.25rem', borderRadius: '16px', background: 'linear-gradient(to right, #3b82f6, #8b5cf6)', border: 'none', color: 'white', fontWeight: 900, textTransform: 'uppercase', fontSize: '11px', letterSpacing: '0.1em', cursor: 'pointer' }}>
+                  Complete Mission & Home
+                </button>
+                <button onClick={() => setShowEndDay(false)} style={{ background: 'none', border: 'none', color: '#94a3b8', fontSize: '10px', fontWeight: 800, textTransform: 'uppercase', cursor: 'pointer' }}>
+                  Stay on Duty
+                </button>
               </div>
             </motion.div>
           </motion.div>
