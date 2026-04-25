@@ -17,7 +17,7 @@ export default function Auth() {
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
     
-    if (url && !url.includes('placeholder') && key && !key.includes('placeholder')) {
+    if (url && url !== 'https://placeholder.supabase.co' && key && key !== 'placeholder') {
       setDbStatus('connected');
     } else {
       setDbStatus('disconnected');
@@ -149,7 +149,8 @@ export default function Auth() {
           
           <div style={eliteStyles.statusBadge}>
             <Activity size={10} />
-            DATABASE {dbStatus.toUpperCase()}
+            DATABASE {dbStatus.toUpperCase()} 
+            {dbStatus === 'disconnected' && ` (URL: ${process.env.NEXT_PUBLIC_SUPABASE_URL?.substring(0, 8)}...)`}
           </div>
 
           <h2 style={{ fontSize: '1.5rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '-0.02em', margin: 0 }}>Access Mandate</h2>
