@@ -160,10 +160,10 @@ export default function Dashboard() {
   }, [currentTime, tasks]);
 
   useEffect(() => {
-    if (session && !loading && tasks.length === 0 && !isInitialLoad.current) {
+    if (session && !loading && mandateName === 'UNNAMED MANDATE' && !isInitialLoad.current) {
       setOnboarding(true);
     }
-  }, [session, loading, tasks.length]);
+  }, [session, loading, mandateName]);
 
   const handleCreateMandate = () => {
     if (!mandateName.trim()) return;
@@ -492,6 +492,41 @@ export default function Dashboard() {
                   <button onClick={() => setShowAddModal(false)} style={{ flex: 1, padding: '1rem', borderRadius: '12px', background: 'transparent', border: '1px solid #475569', color: '#94a3b8' }}>CANCEL</button>
                   <button onClick={addTask} style={{ flex: 2, padding: '1rem', borderRadius: '12px', background: 'white', color: 'black', fontWeight: 900 }}>INITIALIZE</button>
                 </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Global Settings Modal */}
+      <AnimatePresence>
+        {showSettings && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ position: 'fixed', inset: 0, background: 'rgba(2,6,23,0.85)', backdropFilter: 'blur(10px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 3000, padding: '1.5rem' }}>
+            <motion.div initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} style={{ ...styles.glassCard, width: '100%', maxWidth: '400px', padding: '2rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 900, textTransform: 'uppercase', color: 'white' }}>System Config</h3>
+                <button onClick={() => setShowSettings(false)} style={{ background: 'none', border: 'none', color: '#cbd5e1' }}><X size={18}/></button>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                <button 
+                  onClick={() => Notification.requestPermission()}
+                  style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', background: 'rgba(59, 130, 246, 0.2)', borderRadius: '12px', border: '1px solid rgba(59, 130, 246, 0.3)', color: '#93c5fd', textAlign: 'left' }}
+                >
+                  <Bell size={20} />
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: '11px', fontWeight: 700 }}>ENABLE SYSTEM ALERTS</div>
+                    <div style={{ fontSize: '8px', color: '#cbd5e1' }}>Allow background push notifications</div>
+                  </div>
+                </button>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', border: '1px dashed #475569', cursor: 'pointer' }}>
+                  <UploadCloud size={20} color="#60a5fa" />
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', color: 'white' }}>Restore Mandate</div>
+                    <div style={{ fontSize: '9px', color: '#94a3b8' }}>Import JSON backup</div>
+                  </div>
+                  <input type="file" onChange={handleImport} style={{ display: 'none' }} />
+                </label>
+                <button onClick={() => supabase.auth.signOut()} style={{ padding: '0.9rem', borderRadius: '12px', background: '#ef444420', border: '1px solid #ef444440', color: '#f87171', fontWeight: 700, fontSize: '11px', textTransform: 'uppercase' }}>Sign Out</button>
               </div>
             </motion.div>
           </motion.div>
