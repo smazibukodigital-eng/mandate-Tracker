@@ -57,6 +57,8 @@ export default function Dashboard() {
   const [newTaskText, setNewTaskText] = useState('');
   const [newTaskType, setNewTaskType] = useState<'daily' | 'milestone'>('daily');
   const [newTaskTime, setNewTaskTime] = useState('08:00');
+  const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'success' | 'error'>('idle');
+  const [syncError, setSyncError] = useState('');
 
   useEffect(() => {
     setMounted(true);
@@ -117,7 +119,8 @@ export default function Dashboard() {
     if (isInitialLoad.current) return;
     const syncToCloud = async () => {
       if (session && tasks.length > 0) {
-        await supabase
+        setSyncStatus('syncing');
+        const { error } = await supabase
           .from('profiles')
           .upsert({
             id: session.user.id,
@@ -127,6 +130,14 @@ export default function Dashboard() {
             mandate_name: mandateName,
             updated_at: new Date().toISOString()
           });
+        
+        if (error) {
+          setSyncStatus('error');
+          setSyncError(error.message);
+        } else {
+          setSyncStatus('success');
+          setTimeout(() => setSyncStatus('idle'), 3000);
+        }
       }
     };
     const debounce = setTimeout(syncToCloud, 2000);
@@ -328,6 +339,12 @@ export default function Dashboard() {
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.4rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: syncStatus === 'error' ? '#ef444420' : 'rgba(255,255,255,0.05)', padding: '0.2rem 0.5rem', borderRadius: '4px', border: syncStatus === 'error' ? '1px solid #ef444440' : '1px solid rgba(255,255,255,0.1)' }}>
+                     <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: syncStatus === 'syncing' ? '#3b82f6' : syncStatus === 'error' ? '#ef4444' : syncStatus === 'success' ? '#10b981' : '#94a3b8' }} className={syncStatus === 'syncing' ? 'animate-pulse' : ''} />
+                     <span style={{ fontSize: '7px', fontWeight: 800, color: syncStatus === 'error' ? '#f87171' : '#94a3b8' }}>
+                       {syncStatus === 'syncing' ? 'SYNCING' : syncStatus === 'error' ? 'SYNC ERROR' : syncStatus === 'success' ? 'CLOUD SAVED' : 'CLOUD ACTIVE'}
+                     </span>
+                  </div>
                   <div style={{ fontSize: '11px', fontWeight: 900, color: '#93c5fd', fontFamily: 'monospace' }}>
                     {currentTime ? currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '--:--:--'}
                   </div>
@@ -335,6 +352,7 @@ export default function Dashboard() {
                     <Settings2 size={16}/>
                   </button>
                 </div>
+                {syncStatus === 'error' && <div style={{ fontSize: '7px', color: '#f87171', fontWeight: 700 }}>{syncError}</div>}
                 <div style={{ background: 'rgba(59, 130, 246, 0.2)', borderRadius: '99px', padding: '0.2rem 0.5rem', fontSize: '9px', fontWeight: 700, color: '#bfdbfe' }}>
                   <Zap size={9} fill="currentColor" /> {streak} DAY STREAK
                 </div>
