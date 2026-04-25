@@ -192,7 +192,7 @@ export default function Dashboard() {
   const styles = {
     container: {
       height: '100vh',
-      background: 'radial-gradient(circle at top right, #1e1b4b 0%, #0a0a0b 100%)',
+      background: 'radial-gradient(circle at top right, #2e2a5e 0%, #0a0a0b 100%)',
       color: 'white',
       display: 'flex',
       flexDirection: 'column' as const,
@@ -201,9 +201,9 @@ export default function Dashboard() {
       fontFamily: "'Inter', sans-serif"
     },
     glassCard: {
-      background: 'rgba(255, 255, 255, 0.03)',
+      background: 'rgba(255, 255, 255, 0.05)',
       backdropFilter: 'blur(20px)',
-      border: '1px solid rgba(255, 255, 255, 0.05)',
+      border: '1px solid rgba(255, 255, 255, 0.1)',
       borderRadius: '20px',
       padding: '1rem'
     }

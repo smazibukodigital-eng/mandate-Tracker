@@ -37,15 +37,15 @@ export default function Auth() {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      background: 'radial-gradient(circle at center, #1a1a1c 0%, #0a0a0b 100%)',
+      background: 'radial-gradient(circle at center, #2a2a2c 0%, #0a0a0b 100%)',
       padding: '2rem'
     },
     card: {
       width: '100%',
       maxWidth: '400px',
-      background: 'rgba(255, 255, 255, 0.03)',
+      background: 'rgba(255, 255, 255, 0.05)',
       backdropFilter: 'blur(25px)',
-      border: '1px solid rgba(255, 255, 255, 0.08)',
+      border: '1px solid rgba(255, 255, 255, 0.12)',
       borderRadius: '28px',
       padding: '3rem 2.5rem',
       boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.7)',
