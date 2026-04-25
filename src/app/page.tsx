@@ -30,6 +30,8 @@ import { supabase } from '@/lib/supabase';
 import { INITIAL_SKILLS, Skill, calculateLevel } from '@/lib/gamification';
 import Auth from '@/components/Auth';
 
+export const dynamic = 'force-dynamic';
+
 export default function Dashboard() {
   const [mounted, setMounted] = useState(false);
   const [session, setSession] = useState<any>(null);
