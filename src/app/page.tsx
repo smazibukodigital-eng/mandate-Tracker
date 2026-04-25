@@ -150,7 +150,7 @@ export default function Dashboard() {
                   body: `Mission Due: ${task.text}`,
                   icon: '/icon-192x192.png',
                   vibrate: [200, 100, 200]
-                });
+                } as any);
               });
             } else {
               new Notification('MANDATE ALERT', {
