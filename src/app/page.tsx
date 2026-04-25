@@ -178,6 +178,29 @@ export default function Dashboard() {
     setStatus('on-duty');
   };
 
+  const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async (event: any) => {
+      try {
+        const data = JSON.parse(event.target.result);
+        if (data.state) {
+          setTasks(data.state);
+          if (data.cfg?.health) setHealth(data.cfg.health);
+          if (data.cfg?.streak) setStreak(data.cfg.streak);
+          if (data.cfg?.mandateName) setMandateName(data.cfg.mandateName);
+          setActiveTab(data.state[0].id);
+          setShowSettings(false);
+          setOnboarding(false);
+        }
+      } catch (err) {
+        alert('Invalid backup file.');
+      }
+    };
+    reader.readAsText(file);
+  };
+
   const addTask = () => {
     if (!newTaskText.trim()) return;
     if (editingTask) {
