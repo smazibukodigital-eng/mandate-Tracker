@@ -510,6 +510,15 @@ export default function Dashboard() {
                 <button onClick={() => setShowSettings(false)} style={{ background: 'none', border: 'none', color: '#cbd5e1' }}><X size={18}/></button>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                <div>
+                  <label style={{ fontSize: '9px', fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em' }}>RENAME MANDATE</label>
+                  <input 
+                    value={mandateName} 
+                    onChange={(e) => setMandateName(e.target.value.toUpperCase())} 
+                    style={{ width: '100%', background: '#1e293b', border: '1px solid #475569', borderRadius: '12px', padding: '0.75rem', color: 'white', marginTop: '0.5rem', outline: 'none', fontSize: '11px', fontWeight: 700 }} 
+                  />
+                </div>
+
                 <button 
                   onClick={() => Notification.requestPermission()}
                   style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', background: 'rgba(59, 130, 246, 0.2)', borderRadius: '12px', border: '1px solid rgba(59, 130, 246, 0.3)', color: '#93c5fd', textAlign: 'left' }}
