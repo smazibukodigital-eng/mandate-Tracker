@@ -588,15 +588,21 @@ export default function Dashboard() {
                 </div>
 
                 <button 
-                  onClick={() => {
-                    if ('serviceWorker' in navigator) {
-                      navigator.serviceWorker.ready.then(reg => {
+                  onClick={async () => {
+                    const permission = await Notification.requestPermission();
+                    if (permission === 'granted') {
+                      if ('serviceWorker' in navigator) {
+                        const reg = await navigator.serviceWorker.ready;
                         reg.showNotification('MANDATE SYSTEM TEST', {
                           body: 'Operational alerts are ONLINE.',
                           icon: '/icon-192x192.png',
                           vibrate: [200, 100, 200]
                         } as any);
-                      });
+                      } else {
+                        new Notification('MANDATE SYSTEM TEST', { body: 'Operational alerts are ONLINE.' });
+                      }
+                    } else {
+                      alert('Permission Denied. Please enable notifications in your browser settings.');
                     }
                   }}
                   style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', background: 'rgba(16, 185, 129, 0.1)', borderRadius: '12px', border: '1px solid rgba(16, 185, 129, 0.2)', color: '#10b981', textAlign: 'left', cursor: 'pointer' }}
