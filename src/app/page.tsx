@@ -19,7 +19,8 @@ import {
   Settings2,
   Trash2,
   Play,
-  ClipboardList
+  ClipboardList,
+  Plus
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { INITIAL_SKILLS, Skill, calculateLevel } from '@/lib/gamification';
