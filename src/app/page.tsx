@@ -192,8 +192,8 @@ export default function Dashboard() {
   const styles = {
     container: {
       height: '100vh',
-      background: 'radial-gradient(circle at top right, #2e2a5e 0%, #0a0a0b 100%)',
-      color: 'white',
+      background: 'radial-gradient(circle at top right, #1e293b 0%, #020617 100%)',
+      color: '#f8fafc',
       display: 'flex',
       flexDirection: 'column' as const,
       padding: '1.25rem',
@@ -201,9 +201,9 @@ export default function Dashboard() {
       fontFamily: "'Inter', sans-serif"
     },
     glassCard: {
-      background: 'rgba(255, 255, 255, 0.05)',
+      background: 'rgba(255, 255, 255, 0.08)',
       backdropFilter: 'blur(20px)',
-      border: '1px solid rgba(255, 255, 255, 0.1)',
+      border: '1px solid rgba(255, 255, 255, 0.15)',
       borderRadius: '20px',
       padding: '1rem'
     }
@@ -214,19 +214,19 @@ export default function Dashboard() {
       {/* Header */}
       <header style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
         <div>
-          <p style={{ fontSize: '8px', color: '#444', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.2em' }}>
+          <p style={{ fontSize: '8px', color: '#94a3b8', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.2em' }}>
             OPERATOR: {session?.user?.email?.split('@')[0]?.toUpperCase() || 'OPERATOR'}
           </p>
-          <h1 style={{ fontSize: '1.35rem', fontWeight: 900, lineHeight: 1.1, marginTop: '0.3rem', textTransform: 'uppercase' }}>
+          <h1 style={{ fontSize: '1.35rem', fontWeight: 900, lineHeight: 1.1, marginTop: '0.3rem', textTransform: 'uppercase', color: 'white' }}>
             {mandateName}
           </h1>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.4rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <div style={{ fontSize: '11px', fontWeight: 900, color: '#3b82f6', fontFamily: 'monospace' }}>
+            <div style={{ fontSize: '11px', fontWeight: 900, color: '#60a5fa', fontFamily: 'monospace' }}>
               {currentTime ? currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '--:--:--'}
             </div>
-            <button onClick={() => setShowSettings(true)} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)', padding: '0.4rem', borderRadius: '8px', color: '#444', cursor: 'pointer' }}>
+            <button onClick={() => setShowSettings(true)} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '0.4rem', borderRadius: '8px', color: '#94a3b8', cursor: 'pointer' }}>
               <Settings2 size={16}/>
             </button>
           </div>
@@ -240,27 +240,27 @@ export default function Dashboard() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.5rem', marginBottom: '1.25rem' }}>
         <div style={styles.glassCard}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem' }}>
-            <span style={{ fontSize: '8px', fontWeight: 700, color: '#555', textTransform: 'uppercase' }}>Daily</span>
+            <span style={{ fontSize: '8px', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase' }}>Daily</span>
             <Activity size={10} color="#10b981" />
           </div>
           <div style={{ fontSize: '1rem', fontWeight: 900 }}>{Math.round(dailyPct)}%</div>
-          <div style={{ height: '4px', background: '#111', borderRadius: '2px', marginTop: '0.4rem', overflow: 'hidden' }}>
+          <div style={{ height: '4px', background: '#0f172a', borderRadius: '2px', marginTop: '0.4rem', overflow: 'hidden' }}>
             <motion.div animate={{ width: `${dailyPct}%` }} style={{ height: '100%', background: '#10b981' }} />
           </div>
         </div>
         <div style={styles.glassCard}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem' }}>
-            <span style={{ fontSize: '8px', fontWeight: 700, color: '#555', textTransform: 'uppercase' }}>Mandate</span>
+            <span style={{ fontSize: '8px', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase' }}>Mandate</span>
             <Award size={10} color="#f59e0b" />
           </div>
           <div style={{ fontSize: '1rem', fontWeight: 900 }}>{Math.round(milestonePct)}%</div>
-          <div style={{ height: '4px', background: '#111', borderRadius: '2px', marginTop: '0.4rem', overflow: 'hidden' }}>
+          <div style={{ height: '4px', background: '#0f172a', borderRadius: '2px', marginTop: '0.4rem', overflow: 'hidden' }}>
             <motion.div animate={{ width: `${milestonePct}%` }} style={{ height: '100%', background: '#f59e0b' }} />
           </div>
         </div>
         <div style={styles.glassCard}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem' }}>
-            <span style={{ fontSize: '8px', fontWeight: 700, color: '#555', textTransform: 'uppercase' }}>Rank {calculateLevel(totalXp)}</span>
+            <span style={{ fontSize: '8px', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase' }}>Rank {calculateLevel(totalXp)}</span>
             <Shield size={10} color="#3b82f6" />
           </div>
           <div style={{ fontSize: '1rem', fontWeight: 900 }}>{totalXp}</div>
@@ -274,9 +274,9 @@ export default function Dashboard() {
       <div style={{ display: 'flex', gap: '0.4rem', overflowX: 'auto', paddingBottom: '0.75rem', marginBottom: '0.75rem', scrollbarWidth: 'none' }}>
         {tasks.map(s => (
           <button key={s.id} onClick={() => setActiveTab(s.id)} style={{
-              padding: '0.4rem 0.9rem', borderRadius: '99px', border: '1px solid rgba(255,255,255,0.05)',
-              background: activeTab === s.id ? 'linear-gradient(to right, #2563eb, #7c3aed)' : '#161618',
-              color: activeTab === s.id ? 'white' : '#555',
+              padding: '0.4rem 0.9rem', borderRadius: '99px', border: '1px solid rgba(255,255,255,0.1)',
+              background: activeTab === s.id ? 'linear-gradient(to right, #3b82f6, #8b5cf6)' : '#1e293b',
+              color: activeTab === s.id ? 'white' : '#94a3b8',
               fontSize: '10px', fontWeight: 700, whiteSpace: 'nowrap', cursor: 'pointer'
             }}>{s.title.toUpperCase()}</button>
         ))}
@@ -288,14 +288,14 @@ export default function Dashboard() {
           <>
             {dailyTasks.map((t: any) => (
               <div key={t.id} style={{ ...styles.glassCard, display: 'flex', alignItems: 'center', gap: '0.75rem', opacity: t.completed ? 0.3 : 1, marginBottom: '0.5rem' }}>
-                <div onClick={() => toggleTask(activeMission.id, t.id)} style={{ width: '18px', height: '18px', borderRadius: '50%', border: t.completed ? 'none' : '2px solid #333', background: t.completed ? '#10b981' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                <div onClick={() => toggleTask(activeMission.id, t.id)} style={{ width: '18px', height: '18px', borderRadius: '50%', border: t.completed ? 'none' : '2px solid #475569', background: t.completed ? '#10b981' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                   {t.completed && <CheckCircle2 size={12} color="white" />}
                 </div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: '11px', fontWeight: 600, textDecoration: t.completed ? 'line-through' : 'none' }}>{t.text}</div>
+                  <div style={{ fontSize: '11px', fontWeight: 600, textDecoration: t.completed ? 'line-through' : 'none', color: t.completed ? '#64748b' : 'white' }}>{t.text}</div>
                   <div onClick={() => startEdit(t)} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginTop: '4px', cursor: 'pointer' }}>
-                    <Clock size={10} color={t.time ? "#3b82f6" : "#333"} />
-                    <span style={{ fontSize: '8px', color: t.time ? "#3b82f6" : "#333", fontWeight: 700 }}>{t.time || 'SET REMINDER'}</span>
+                    <Clock size={10} color={t.time ? "#60a5fa" : "#475569"} />
+                    <span style={{ fontSize: '8px', color: t.time ? "#60a5fa" : "#475569", fontWeight: 700 }}>{t.time || 'SET REMINDER'}</span>
                   </div>
                 </div>
               </div>
@@ -325,24 +325,24 @@ export default function Dashboard() {
                 <p style={{ color: '#444', fontSize: '12px', marginTop: '0.5rem' }}>Configure your operational missions.</p>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                <div>
-                  <label style={{ fontSize: '10px', fontWeight: 800, color: '#555', textTransform: 'uppercase' }}>Mandate Name</label>
-                  <input value={mandateName} onChange={(e) => setMandateName(e.target.value.toUpperCase())} placeholder="E.G. SIBCO EMPIRE" style={{ width: '100%', background: '#111', border: '1px solid #333', borderRadius: '12px', padding: '1rem', color: 'white', marginTop: '0.5rem', outline: 'none' }} />
+          <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+            <label style={{ fontSize: '11px', fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Mandate Name</label>
+            <input value={mandateName} onChange={(e) => setMandateName(e.target.value.toUpperCase())} placeholder="E.G. SIBCO EMPIRE" style={{ width: '100%', background: '#1e293b', border: '1px solid #334155', borderRadius: '12px', padding: '1rem', color: 'white', marginTop: '0.5rem', outline: 'none' }} />
+          </div>
+          <div>
+            <label style={{ fontSize: '11px', fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase' }}>Operational Missions</label>
+            <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem', flexWrap: 'wrap' }}>
+              {obMissions.map(m => (
+                <div key={m} style={{ background: '#334155', border: '1px solid #475569', borderRadius: '8px', padding: '0.4rem 0.8rem', fontSize: '10px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  {m} <X size={12} onClick={() => setObMissions(obMissions.filter(x => x !== m))} style={{ cursor: 'pointer' }} />
                 </div>
-                <div>
-                  <label style={{ fontSize: '10px', fontWeight: 800, color: '#555', textTransform: 'uppercase' }}>Operational Missions</label>
-                  <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem', flexWrap: 'wrap' }}>
-                    {obMissions.map(m => (
-                      <div key={m} style={{ background: '#1a1a1c', border: '1px solid #333', borderRadius: '8px', padding: '0.4rem 0.8rem', fontSize: '10px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        {m} <X size={12} onClick={() => setObMissions(obMissions.filter(x => x !== m))} style={{ cursor: 'pointer' }} />
-                      </div>
-                    ))}
-                  </div>
-                  <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.75rem' }}>
-                    <input value={newObMission} onChange={(e) => setNewObMission(e.target.value)} placeholder="Type mission name..." style={{ flex: 1, background: '#111', border: '1px solid #222', borderRadius: '8px', padding: '0.6rem', color: 'white', fontSize: '11px', outline: 'none' }} />
-                    <button onClick={() => { if(newObMission) { setObMissions([...obMissions, newObMission]); setNewObMission(''); } }} style={{ background: '#3b82f6', border: 'none', color: 'white', borderRadius: '8px', padding: '0.6rem 1rem', cursor: 'pointer' }}><Plus size={16}/></button>
-                  </div>
-                </div>
+              ))}
+            </div>
+            <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.75rem' }}>
+              <input value={newObMission} onChange={(e) => setNewObMission(e.target.value)} placeholder="Type mission name..." style={{ flex: 1, background: '#1e293b', border: '1px solid #334155', borderRadius: '8px', padding: '0.6rem', color: 'white', fontSize: '11px', outline: 'none' }} />
+              <button onClick={() => { if(newObMission) { setObMissions([...obMissions, newObMission]); setNewObMission(''); } }} style={{ background: '#3b82f6', border: 'none', color: 'white', borderRadius: '8px', padding: '0.6rem 1rem', cursor: 'pointer' }}><Plus size={16}/></button>
+            </div>
+          </div>
                 <button onClick={handleCreateMandate} style={{ width: '100%', padding: '1.25rem', borderRadius: '16px', background: 'linear-gradient(to right, #3b82f6, #8b5cf6)', border: 'none', color: 'white', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em', cursor: 'pointer', marginTop: '1rem' }}>Confirm Initialization</button>
               </div>
             </div>

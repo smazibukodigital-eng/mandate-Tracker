@@ -37,15 +37,15 @@ export default function Auth() {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      background: 'radial-gradient(circle at center, #2a2a2c 0%, #0a0a0b 100%)',
+      background: 'radial-gradient(circle at center, #1e293b 0%, #020617 100%)',
       padding: '2rem'
     },
     card: {
       width: '100%',
       maxWidth: '400px',
-      background: 'rgba(255, 255, 255, 0.05)',
+      background: 'rgba(255, 255, 255, 0.1)',
       backdropFilter: 'blur(25px)',
-      border: '1px solid rgba(255, 255, 255, 0.12)',
+      border: '1px solid rgba(255, 255, 255, 0.2)',
       borderRadius: '28px',
       padding: '3rem 2.5rem',
       boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.7)',
@@ -100,30 +100,30 @@ export default function Auth() {
         transition={{ type: 'spring', damping: 20 }}
         style={eliteStyles.card}
       >
-        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+          <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
           <motion.div 
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.2 }}
             style={{ 
               width: '72px', height: '72px', margin: '0 auto 1.25rem', 
-              background: 'rgba(59, 130, 246, 0.1)', borderRadius: '20px',
+              background: 'rgba(59, 130, 246, 0.2)', borderRadius: '20px',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              border: '1px solid rgba(59, 130, 246, 0.2)',
-              boxShadow: '0 0 20px rgba(59, 130, 246, 0.1)'
+              border: '1px solid rgba(59, 130, 246, 0.3)',
+              boxShadow: '0 0 30px rgba(59, 130, 246, 0.2)'
             }}
           >
-            <ShieldCheck size={36} color="#3b82f6" />
+            <ShieldCheck size={36} color="#60a5fa" />
           </motion.div>
-          <h2 style={{ fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '-0.02em', margin: 0 }}>Access Mandate</h2>
-          <p style={{ fontSize: '0.65rem', fontWeight: 800, color: '#555', marginTop: '0.4rem', textTransform: 'uppercase', letterSpacing: '0.2em' }}>Secure Entry Point</p>
+          <h2 style={{ fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '-0.02em', margin: 0, color: 'white' }}>Access Mandate</h2>
+          <p style={{ fontSize: '0.65rem', fontWeight: 800, color: '#94a3b8', marginTop: '0.4rem', textTransform: 'uppercase', letterSpacing: '0.2em' }}>Secure Entry Point</p>
         </div>
 
         <form onSubmit={handleAuth} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <label style={{ fontSize: '10px', fontWeight: 700, color: '#444', textTransform: 'uppercase', letterSpacing: '0.1em', marginLeft: '4px' }}>Email Address</label>
+            <label style={{ fontSize: '10px', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em', marginLeft: '4px' }}>Email Address</label>
             <div style={eliteStyles.inputGroup}>
-              <Mail size={18} color="#444" style={{ position: 'absolute', left: '1.1rem' }} />
+              <Mail size={18} color="#64748b" style={{ position: 'absolute', left: '1.1rem' }} />
               <input 
                 type="email"
                 placeholder="operator@mandate.com"
@@ -135,9 +135,9 @@ export default function Auth() {
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <label style={{ fontSize: '10px', fontWeight: 700, color: '#444', textTransform: 'uppercase', letterSpacing: '0.1em', marginLeft: '4px' }}>Secure Password</label>
+            <label style={{ fontSize: '10px', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em', marginLeft: '4px' }}>Secure Password</label>
             <div style={eliteStyles.inputGroup}>
-              <Lock size={18} color="#444" style={{ position: 'absolute', left: '1.1rem' }} />
+              <Lock size={18} color="#64748b" style={{ position: 'absolute', left: '1.1rem' }} />
               <input 
                 type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
@@ -148,7 +148,7 @@ export default function Auth() {
               <button 
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                style={{ position: 'absolute', right: '1.1rem', background: 'none', border: 'none', color: '#444', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                style={{ position: 'absolute', right: '1.1rem', background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
