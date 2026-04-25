@@ -73,13 +73,21 @@ export default function Dashboard() {
         navigator.serviceWorker.register('/sw.js').then(() => console.log('SW Active'));
       }
     }
+    return () => clearInterval(timer);
+  }, []);
 
-    const initSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+  // Secure Auth & Cloud Fetch Logic
+  useEffect(() => {
+    if (!supabase) return;
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setSession(session);
+      
       if (session) {
-        // Load Profile from Supabase
-        const { data: profile, error } = await supabase
+        setLoading(true);
+        isInitialLoad.current = true;
+        
+        const { data: profile } = await supabase
           .from('profiles')
           .select('*')
           .eq('id', session.user.id)
@@ -93,25 +101,26 @@ export default function Dashboard() {
           if (profile.health) setHealth(profile.health);
           if (profile.streak) setStreak(profile.streak);
           if (profile.mandate_name) setMandateName(profile.mandate_name);
+        } else {
+          setTasks([]);
+          setHealth(100);
+          setStreak(0);
+          setMandateName('UNNAMED MANDATE');
         }
+        
+        setLoading(false);
+        isInitialLoad.current = false;
+      } else {
+        // Sign Out Sequence: Immediate Wipe
+        setTasks([]);
+        setHealth(100);
+        setStreak(0);
+        setMandateName('UNNAMED MANDATE');
+        setLoading(false);
       }
-      setLoading(false);
-      isInitialLoad.current = false;
-    };
+    });
 
-    if (supabase) {
-      initSession();
-      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: any, session: any) => {
-        setSession(session);
-      });
-
-      return () => {
-        clearInterval(timer);
-        subscription.unsubscribe();
-      };
-    } else {
-      setLoading(false);
-    }
+    return () => subscription.unsubscribe();
   }, []);
 
   // Cloud Sync Engine: Auto-save tasks to Supabase
