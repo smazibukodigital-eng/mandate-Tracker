@@ -1,5 +1,5 @@
 'use client';
-// Build ID: 1777132440 - Feature Restoration Sync
+// Build ID: 1777132441 - TypeScript Strict Mode Fix
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -64,23 +64,27 @@ export default function Dashboard() {
     setMounted(true);
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     
-    if ("Notification" in window && Notification.permission === "default") {
+    if (typeof window !== 'undefined' && "Notification" in window && Notification.permission === "default") {
       Notification.requestPermission();
     }
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
+    if (supabase) {
+      supabase.auth.getSession().then(({ data: { session } }: any) => {
+        setSession(session);
+        setLoading(false);
+      });
+
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: any, session: any) => {
+        setSession(session);
+      });
+
+      return () => {
+        clearInterval(timer);
+        subscription.unsubscribe();
+      };
+    } else {
       setLoading(false);
-    });
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    return () => {
-      clearInterval(timer);
-      subscription.unsubscribe();
-    };
+    }
   }, []);
 
   // Monitor for onboarding needs
@@ -90,8 +94,8 @@ export default function Dashboard() {
     }
   }, [session, loading, tasks.length]);
 
-  const handleImport = async (e: any) => {
-    const file = e.target.files[0];
+  const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
     reader.onload = async (event: any) => {
