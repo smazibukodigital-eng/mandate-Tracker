@@ -72,18 +72,33 @@ export default function Dashboard() {
         Notification.requestPermission();
       }
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js').then(reg => {
-          console.log('SW Registered', reg);
-        });
+        navigator.serviceWorker.register('/sw.js').then(reg => console.log('SW Registered'));
       }
     }
 
-    if (supabase) {
-      supabase.auth.getSession().then(({ data: { session } }: any) => {
-        setSession(session);
-        setLoading(false);
-      });
+    const initSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setSession(session);
+      if (session) {
+        // Load Profile from Supabase
+        const { data: profile, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', session.user.id)
+          .single();
 
+        if (profile) {
+          if (profile.tasks) setTasks(profile.tasks);
+          if (profile.health) setHealth(profile.health);
+          if (profile.streak) setStreak(profile.streak);
+          if (profile.mandate_name) setMandateName(profile.mandate_name);
+        }
+      }
+      setLoading(false);
+    };
+
+    if (supabase) {
+      initSession();
       const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: any, session: any) => {
         setSession(session);
       });
@@ -96,6 +111,26 @@ export default function Dashboard() {
       setLoading(false);
     }
   }, []);
+
+  // Cloud Sync Engine: Auto-save tasks to Supabase
+  useEffect(() => {
+    const syncToCloud = async () => {
+      if (session && tasks.length > 0) {
+        await supabase
+          .from('profiles')
+          .upsert({
+            id: session.user.id,
+            tasks,
+            health,
+            streak,
+            mandate_name: mandateName,
+            updated_at: new Date().toISOString()
+          });
+      }
+    };
+    const debounce = setTimeout(syncToCloud, 2000);
+    return () => clearTimeout(debounce);
+  }, [tasks, health, streak, mandateName, session]);
 
   // Notification Scheduler Engine
   useEffect(() => {
@@ -214,8 +249,12 @@ export default function Dashboard() {
   };
 
   const activeMission = tasks.find(m => m.id === activeTab);
-  const dailyTasks = activeMission?.tasks.filter((t: any) => t.type === 'daily') || [];
-  const milestones = activeMission?.tasks.filter((t: any) => t.type === 'milestone') || [];
+  const dailyTasks = activeMission?.tasks.filter((t: any) => t.type?.toLowerCase() === 'daily') || [];
+  const milestones = activeMission?.tasks.filter((t: any) => 
+    t.type?.toLowerCase() === 'milestone' || 
+    t.type?.toLowerCase() === 'monthly' ||
+    t.type?.toLowerCase() === 'mandate'
+  ) || [];
   
   const dailyPct = dailyTasks.length ? (dailyTasks.filter((t: any) => t.completed).length / dailyTasks.length) * 100 : 0;
   const milestonePct = milestones.length ? (milestones.filter((t: any) => t.completed).length / milestones.length) * 100 : 0;
