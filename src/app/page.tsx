@@ -596,6 +596,32 @@ export default function Dashboard() {
                   />
                 </div>
 
+                <div>
+                  <label style={{ fontSize: '9px', fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em' }}>ADD OPERATIONAL UNIT (TAB)</label>
+                  <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
+                    <input 
+                      value={newObMission} 
+                      onChange={(e) => setNewObMission(e.target.value)} 
+                      placeholder="NEW UNIT NAME..." 
+                      style={{ flex: 1, background: '#1e293b', border: '1px solid #475569', borderRadius: '8px', padding: '0.6rem', color: 'white', fontSize: '11px' }} 
+                    />
+                    <button 
+                      onClick={() => { 
+                        if(newObMission) { 
+                          const newId = newObMission.toLowerCase().replace(/\s+/g, '-');
+                          if (!tasks.find(t => t.id === newId)) {
+                            setTasks([...tasks, { id: newId, title: newObMission, tasks: [] }]);
+                          }
+                          setNewObMission(''); 
+                        } 
+                      }} 
+                      style={{ background: '#3b82f6', border: 'none', color: 'white', borderRadius: '8px', padding: '0.6rem' }}
+                    >
+                      <Plus size={16}/>
+                    </button>
+                  </div>
+                </div>
+
                 <button 
                   onClick={async () => {
                     const permission = await Notification.requestPermission();
