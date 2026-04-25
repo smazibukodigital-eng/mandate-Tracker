@@ -109,10 +109,20 @@ export default function Dashboard() {
       tasks.forEach(mission => {
         mission.tasks.forEach((task: any) => {
           if (task.time === timeStr && !task.completed) {
-            new Notification('MANDATE ALERT', {
-              body: `Mission Due: ${task.text}`,
-              icon: '/icon-192x192.png'
-            });
+            if ('serviceWorker' in navigator) {
+              navigator.serviceWorker.ready.then(reg => {
+                reg.showNotification('MANDATE ALERT', {
+                  body: `Mission Due: ${task.text}`,
+                  icon: '/icon-192x192.png',
+                  vibrate: [200, 100, 200]
+                });
+              });
+            } else {
+              new Notification('MANDATE ALERT', {
+                body: `Mission Due: ${task.text}`,
+                icon: '/icon-192x192.png'
+              });
+            }
           }
         });
       });
@@ -318,17 +328,36 @@ export default function Dashboard() {
       <div style={{ flex: 1, overflowY: 'auto', paddingBottom: '100px', scrollbarWidth: 'none' }}>
         {activeMission && (
           <>
+            {/* Daily Objectives */}
+            {dailyTasks.length > 0 && (
+              <div style={{ fontSize: '9px', fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.75rem', marginLeft: '0.5rem' }}>Daily Mission</div>
+            )}
             {dailyTasks.map((t: any) => (
               <div key={t.id} style={{ ...styles.glassCard, display: 'flex', alignItems: 'center', gap: '0.75rem', opacity: t.completed ? 0.4 : 1, marginBottom: '0.5rem' }}>
                 <div onClick={() => toggleTask(activeMission.id, t.id)} style={{ width: '20px', height: '20px', borderRadius: '50%', border: t.completed ? 'none' : '2px solid #64748b', background: t.completed ? '#10b981' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                   {t.completed && <CheckCircle2 size={14} color="white" />}
                 </div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: '11px', fontWeight: 600, textDecoration: t.completed ? 'line-through' : 'none', color: t.completed ? '#94a3b8' : 'white' }}>{t.text}</div>
+                  <div style={{ fontSize: '11px', fontWeight: 600, textDecoration: t.completed ? 'line-through' : 'none', color: t.completed ? '#64748b' : 'white' }}>{t.text}</div>
                   <div onClick={() => startEdit(t)} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginTop: '4px', cursor: 'pointer' }}>
                     <Clock size={10} color={t.time ? "#93c5fd" : "#64748b"} />
                     <span style={{ fontSize: '8px', color: t.time ? "#93c5fd" : "#64748b", fontWeight: 700 }}>{t.time || 'SET REMINDER'}</span>
                   </div>
+                </div>
+              </div>
+            ))}
+
+            {/* Monthly Mandates */}
+            {milestones.length > 0 && (
+              <div style={{ fontSize: '9px', fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '1.5rem', marginBottom: '0.75rem', marginLeft: '0.5rem' }}>Monthly Mandate</div>
+            )}
+            {milestones.map((t: any) => (
+              <div key={t.id} style={{ ...styles.glassCard, display: 'flex', alignItems: 'center', gap: '0.75rem', opacity: t.completed ? 0.4 : 1, marginBottom: '0.5rem', borderLeft: '3px solid #f59e0b' }}>
+                <div onClick={() => toggleTask(activeMission.id, t.id)} style={{ width: '20px', height: '20px', borderRadius: '50%', border: t.completed ? 'none' : '2px solid #64748b', background: t.completed ? '#f59e0b' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                  {t.completed && <Check size={14} color="white" />}
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: '11px', fontWeight: 600, textDecoration: t.completed ? 'line-through' : 'none', color: t.completed ? '#64748b' : 'white' }}>{t.text}</div>
                 </div>
               </div>
             ))}
