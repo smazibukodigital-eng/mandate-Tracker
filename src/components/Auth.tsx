@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { motion } from 'framer-motion';
-import { Mail, Lock, ShieldCheck, ArrowRight, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, ShieldCheck, ArrowRight, Eye, EyeOff, Activity } from 'lucide-react';
 
 export default function Auth() {
   const [loading, setLoading] = useState(false);
@@ -11,11 +11,23 @@ export default function Auth() {
   const [password, setPassword] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [dbStatus, setDbStatus] = useState<'checking' | 'connected' | 'disconnected'>('checking');
+
+  useEffect(() => {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    
+    if (url && !url.includes('placeholder') && key && !key.includes('placeholder')) {
+      setDbStatus('connected');
+    } else {
+      setDbStatus('disconnected');
+    }
+  }, []);
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!supabase) {
-      alert('System connection pending. Please verify environment variables.');
+    if (dbStatus === 'disconnected') {
+      alert('DATABASE OFFLINE: Environment variables not detected. Please verify Vercel settings and redeploy.');
       return;
     }
     setLoading(true);
@@ -93,6 +105,22 @@ export default function Auth() {
       gap: '0.6rem',
       boxShadow: '0 10px 20px -5px rgba(59, 130, 246, 0.4)',
       marginTop: '1rem'
+    },
+    statusBadge: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '0.5rem',
+      padding: '0.4rem 0.75rem',
+      borderRadius: '99px',
+      fontSize: '8px',
+      fontWeight: 800,
+      textTransform: 'uppercase' as const,
+      letterSpacing: '0.05em',
+      background: dbStatus === 'connected' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+      color: dbStatus === 'connected' ? '#10b981' : '#ef4444',
+      border: `1px solid ${dbStatus === 'connected' ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)'}`,
+      width: 'fit-content',
+      margin: '0 auto 1.5rem'
     }
   };
 
@@ -104,23 +132,27 @@ export default function Auth() {
         transition={{ type: 'spring', damping: 20 }}
         style={eliteStyles.card}
       >
-        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
           <motion.div 
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.2 }}
             style={{ 
-              width: '72px', height: '72px', margin: '0 auto 1.25rem', 
-              background: 'rgba(59, 130, 246, 0.1)', borderRadius: '20px',
+              width: '64px', height: '64px', margin: '0 auto 1rem', 
+              background: 'rgba(59, 130, 246, 0.1)', borderRadius: '18px',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              border: '1px solid rgba(59, 130, 246, 0.2)',
-              boxShadow: '0 0 20px rgba(59, 130, 246, 0.1)'
+              border: '1px solid rgba(59, 130, 246, 0.2)'
             }}
           >
-            <ShieldCheck size={36} color="#3b82f6" />
+            <ShieldCheck size={32} color="#3b82f6" />
           </motion.div>
-          <h2 style={{ fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '-0.02em', margin: 0 }}>Access Mandate</h2>
-          <p style={{ fontSize: '0.65rem', fontWeight: 800, color: '#555', marginTop: '0.4rem', textTransform: 'uppercase', letterSpacing: '0.2em' }}>Secure Entry Point</p>
+          
+          <div style={eliteStyles.statusBadge}>
+            <Activity size={10} />
+            DATABASE {dbStatus.toUpperCase()}
+          </div>
+
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '-0.02em', margin: 0 }}>Access Mandate</h2>
         </div>
 
         <form onSubmit={handleAuth} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -165,7 +197,7 @@ export default function Auth() {
           </button>
         </form>
 
-        <div style={{ marginTop: '2.5rem', textAlign: 'center' }}>
+        <div style={{ marginTop: '2rem', textAlign: 'center' }}>
           <button 
             onClick={() => setIsSignUp(!isSignUp)}
             style={{ background: 'none', border: 'none', color: '#444', fontSize: '0.65rem', fontWeight: 800, textTransform: 'uppercase', cursor: 'pointer', transition: 'color 0.2s', letterSpacing: '0.05em' }}
