@@ -300,6 +300,19 @@ export default function Dashboard() {
     }));
   };
 
+  const toggleTaskType = (missionId: string, taskId: string, currentType: string) => {
+    const newType = currentType?.toLowerCase() === 'daily' ? 'milestone' : 'daily';
+    setTasks(prev => prev.map(m => {
+      if (m.id === missionId) {
+        return {
+          ...m,
+          tasks: m.tasks.map((t: any) => t.id === taskId ? { ...t, type: newType } : t)
+        };
+      }
+      return m;
+    }));
+  };
+
   const activeMission = tasks.find(m => m.id === activeTab);
   const dailyTasks = activeMission?.tasks.filter((t: any) => t.type?.toLowerCase() === 'daily') || [];
   const milestones = activeMission?.tasks.filter((t: any) => 
@@ -457,6 +470,9 @@ export default function Dashboard() {
                           <Clock size={10} /> {t.time || 'SET TIME'}
                         </div>
                       </div>
+                      <button onClick={() => toggleTaskType(activeMission.id, t.id, t.type)} style={{ background: '#1e293b', border: '1px solid rgba(255,255,255,0.2)', color: '#60a5fa', borderRadius: '6px', width: '24px', height: '24px', fontSize: '11px', fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                        D
+                      </button>
                       <button onClick={() => deleteTask(t.id)} style={{ background: 'none', border: 'none', color: '#ef444460' }}><Trash2 size={16}/></button>
                     </div>
                   ))}
@@ -480,6 +496,9 @@ export default function Dashboard() {
                           <Clock size={10} /> {t.time || 'SET TIME'}
                         </div>
                       </div>
+                      <button onClick={() => toggleTaskType(activeMission.id, t.id, t.type)} style={{ background: '#1e293b', border: '1px solid rgba(255,255,255,0.2)', color: '#f59e0b', borderRadius: '6px', width: '24px', height: '24px', fontSize: '11px', fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                        M
+                      </button>
                       <button onClick={() => deleteTask(t.id)} style={{ background: 'none', border: 'none', color: '#ef444460' }}><Trash2 size={16}/></button>
                     </div>
                   ))}
