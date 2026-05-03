@@ -448,7 +448,7 @@ export default function Dashboard() {
             </div>
 
             {/* Task List Container */}
-            <div style={{ flex: 1, overflowY: 'auto', paddingBottom: '120px', scrollbarWidth: 'none', minHeight: 0 }}>
+            <div style={{ flex: 1, overflowY: 'auto', scrollbarWidth: 'none', minHeight: 0 }}>
               {activeMission && (
                 <>
                   {/* Daily Objectives */}
@@ -504,6 +504,8 @@ export default function Dashboard() {
                   ))}
                 </>
               )}
+              {/* Spacer for fixed footer */}
+              <div style={{ height: '120px', flexShrink: 0, width: '100%' }} />
             </div>
 
             {/* Footer Actions */}
