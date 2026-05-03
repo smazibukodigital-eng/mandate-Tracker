@@ -78,9 +78,17 @@ export default function Dashboard() {
 
   // Secure Auth & Cloud Fetch Logic
   useEffect(() => {
-    if (!supabase) return;
+    if (!supabase) {
+      setLoading(false);
+      return;
+    }
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    let mounted = true;
+
+    const initialize = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!mounted) return;
       setSession(session);
       
       if (session) {
@@ -92,6 +100,8 @@ export default function Dashboard() {
           .select('*')
           .eq('id', session.user.id)
           .single();
+
+        if (!mounted) return;
 
         if (profile) {
           if (profile.tasks && profile.tasks.length > 0) {
@@ -118,9 +128,29 @@ export default function Dashboard() {
         setMandateName('UNNAMED MANDATE');
         setLoading(false);
       }
+    };
+
+    initialize();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') {
+        if (mounted) initialize();
+      } else if (event === 'SIGNED_OUT') {
+        if (mounted) {
+          setSession(null);
+          setTasks([]);
+          setHealth(100);
+          setStreak(0);
+          setMandateName('UNNAMED MANDATE');
+          setLoading(false);
+        }
+      }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
   // Cloud Sync Engine: Auto-save tasks to Supabase
@@ -500,7 +530,14 @@ export default function Dashboard() {
               />
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '2rem' }}>
-                <button onClick={() => { setStatus('off-duty'); setShowEndDay(false); }} style={{ width: '100%', padding: '1.25rem', borderRadius: '16px', background: 'linear-gradient(to right, #3b82f6, #8b5cf6)', border: 'none', color: 'white', fontWeight: 900, textTransform: 'uppercase', fontSize: '11px', letterSpacing: '0.1em', cursor: 'pointer' }}>
+                <button 
+                  onClick={() => { 
+                    setStreak(prev => prev + 1);
+                    setStatus('off-duty'); 
+                    setShowEndDay(false); 
+                  }} 
+                  style={{ width: '100%', padding: '1.25rem', borderRadius: '16px', background: 'linear-gradient(to right, #3b82f6, #8b5cf6)', border: 'none', color: 'white', fontWeight: 900, textTransform: 'uppercase', fontSize: '11px', letterSpacing: '0.1em', cursor: 'pointer' }}
+                >
                   Complete Mission & Home
                 </button>
                 <button onClick={() => setShowEndDay(false)} style={{ background: 'none', border: 'none', color: '#94a3b8', fontSize: '10px', fontWeight: 800, textTransform: 'uppercase', cursor: 'pointer' }}>
