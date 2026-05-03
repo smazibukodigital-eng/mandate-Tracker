@@ -316,6 +316,43 @@ export default function Dashboard() {
     }));
   };
 
+  const handleEndDay = () => {
+    setTasks(prev => prev.map(m => {
+      const dTasks = m.tasks.filter((t: any) => t.type?.toLowerCase() === 'daily');
+      if (dTasks.length === 0) return m;
+
+      const allCompleted = dTasks.length > 0 && dTasks.every((t: any) => t.completed);
+      let day = m.day || 1;
+      let daysMissed = m.daysMissed || 0;
+
+      if (allCompleted) {
+        day += 1;
+        daysMissed = 0;
+      } else {
+        daysMissed += 1;
+        if (day > 30) {
+          day -= 1;
+        } else {
+          if (daysMissed > 7) {
+            day = 1;
+            daysMissed = 0;
+          }
+        }
+      }
+
+      const resetTasks = m.tasks.map((t: any) => 
+        t.type?.toLowerCase() === 'daily' ? { ...t, completed: false } : t
+      );
+
+      return { ...m, day, daysMissed, tasks: resetTasks };
+    }));
+
+    setStreak(prev => prev + 1);
+    setStatus('off-duty');
+    setShowEndDay(false);
+    setReflection('');
+  };
+
   const activeMission = tasks.find(m => m.id === activeTab);
   const dailyTasks = activeMission?.tasks.filter((t: any) => t.type?.toLowerCase() === 'daily') || [];
   const milestones = activeMission?.tasks.filter((t: any) => 
@@ -446,7 +483,7 @@ export default function Dashboard() {
                     padding: '0.4rem 0.9rem', borderRadius: '99px', border: '1px solid rgba(255,255,255,0.2)',
                     background: activeTab === s.id ? 'linear-gradient(to right, #3b82f6, #8b5cf6)' : '#1e293b',
                     color: 'white', fontSize: '10px', fontWeight: 700, whiteSpace: 'nowrap'
-                  }}>{s.title.toUpperCase()}</button>
+                  }}>{s.title.toUpperCase()} (DAY {s.day || 1})</button>
               ))}
             </div>
 
@@ -561,11 +598,7 @@ export default function Dashboard() {
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '2rem' }}>
                 <button 
-                  onClick={() => { 
-                    setStreak(prev => prev + 1);
-                    setStatus('off-duty'); 
-                    setShowEndDay(false); 
-                  }} 
+                  onClick={handleEndDay} 
                   style={{ width: '100%', padding: '1.25rem', borderRadius: '16px', background: 'linear-gradient(to right, #3b82f6, #8b5cf6)', border: 'none', color: 'white', fontWeight: 900, textTransform: 'uppercase', fontSize: '11px', letterSpacing: '0.1em', cursor: 'pointer' }}
                 >
                   Complete Mission & Home
