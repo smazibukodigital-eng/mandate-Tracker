@@ -20,8 +20,10 @@ import {
   Trash2,
   Play,
   ClipboardList,
-  Plus
+  Plus,
+  Timer
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { INITIAL_SKILLS, Skill, calculateLevel } from '@/lib/gamification';
 import Auth from '@/components/Auth';
@@ -29,6 +31,7 @@ import Auth from '@/components/Auth';
 export const dynamic = 'force-dynamic';
 
 export default function Dashboard() {
+  const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [session, setSession] = useState<any>(null);
   const [status, setStatus] = useState<'off-duty' | 'on-duty'>('off-duty');
@@ -470,6 +473,9 @@ export default function Dashboard() {
                           <Clock size={10} /> {t.time || 'SET TIME'}
                         </div>
                       </div>
+                      <button onClick={() => router.push(`/timer?task=${encodeURIComponent(t.text)}`)} style={{ background: 'rgba(59, 130, 246, 0.1)', border: '1px solid rgba(59, 130, 246, 0.3)', color: '#60a5fa', borderRadius: '6px', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                        <Timer size={12} />
+                      </button>
                       <button onClick={() => toggleTaskType(activeMission.id, t.id, t.type)} style={{ background: '#1e293b', border: '1px solid rgba(255,255,255,0.2)', color: '#60a5fa', borderRadius: '6px', width: '24px', height: '24px', fontSize: '11px', fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                         D
                       </button>
@@ -496,6 +502,9 @@ export default function Dashboard() {
                           <Clock size={10} /> {t.time || 'SET TIME'}
                         </div>
                       </div>
+                      <button onClick={() => router.push(`/timer?task=${encodeURIComponent(t.text)}`)} style={{ background: 'rgba(245, 158, 11, 0.1)', border: '1px solid rgba(245, 158, 11, 0.3)', color: '#f59e0b', borderRadius: '6px', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                        <Timer size={12} />
+                      </button>
                       <button onClick={() => toggleTaskType(activeMission.id, t.id, t.type)} style={{ background: '#1e293b', border: '1px solid rgba(255,255,255,0.2)', color: '#f59e0b', borderRadius: '6px', width: '24px', height: '24px', fontSize: '11px', fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                         M
                       </button>
