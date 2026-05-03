@@ -25,7 +25,23 @@ function TimerContent() {
     } else if (timeLeft === 0 && isActive) {
       setIsActive(false);
       if (typeof window !== 'undefined' && "Notification" in window && Notification.permission === "granted") {
-        new Notification("Timer Complete", { body: `${taskName} session is over!` });
+        try {
+          if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.ready.then(reg => {
+              reg.showNotification('Timer Complete', {
+                body: `${taskName} session is over!`,
+                icon: '/icon-192x192.png',
+                vibrate: [200, 100, 200]
+              } as any).catch(() => {
+                new Notification("Timer Complete", { body: `${taskName} session is over!` });
+              });
+            });
+          } else {
+            new Notification("Timer Complete", { body: `${taskName} session is over!` });
+          }
+        } catch (e) {
+          console.error('Notification error:', e);
+        }
       }
     }
     return () => clearInterval(interval);
